@@ -45,10 +45,19 @@ public class LoginGenerator {
      */
     public String generateLoginForNomAndPrenom(final String nom, final String prenom) {
         String p = deAccent(prenom.substring(0, 1).toUpperCase());
-        String n = deAccent(nom.substring(0, 3).toUpperCase());
+        String n;
+        if (nom.length() < 3) {
+            n = deAccent(nom.substring(0, nom.length()).toUpperCase());
+        } else {
+            n = deAccent(nom.substring(0, 3).toUpperCase());
+        }
         String login = p + n;
         if (loginService.loginExists(login)) {
-            login = login + "1";
+            if (loginService.loginExists(login + "1")) {
+                login = login + "2";
+            }else {
+                login = login + "1";
+            }
         }
         loginService.addLogin(login);
         return login;
